@@ -1,0 +1,6 @@
+@Host = http://localhost:5074
+
+### Test Endpoint
+GET {{Host}}
+
+###
