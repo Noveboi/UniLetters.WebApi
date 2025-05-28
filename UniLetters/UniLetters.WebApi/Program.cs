@@ -5,7 +5,8 @@ using UniLetters.WebApi.Data;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<UniLettersDbContext>(options => options
-    .UseNpgsql(builder.Configuration.GetConnectionString("Database")));
+    .UseNpgsql(builder.Configuration.GetConnectionString("Database"))
+    .EnableSensitiveDataLogging());
 
 builder.Services
     .AddFastEndpoints()

@@ -9,22 +9,20 @@ public class DevEndpoint(UniLettersDbContext context) : EndpointWithoutRequest
 {
     public override void Configure()
     {
-        Post("/dev/init");
+        Post("dev/init");
+        AllowAnonymous();
     }
 
     public override async Task HandleAsync(CancellationToken ct)
     {
-        Logger.LogInformation("Ensuring database exists");
-        if (await context.Database.EnsureCreatedAsync(ct))
-        {
-            Logger.LogInformation("Created database!");
-        }
+        Logger.LogInformation("Deleting database");
+        await context.Database.EnsureDeletedAsync(ct);
+        Logger.LogInformation("Database deleted!");
         
-        Logger.LogInformation("Applying migrations");
+        Logger.LogInformation("Creating database and applying migrations");
         await context.Database.MigrateAsync(ct);
         
-        Logger.LogInformation("Seeding data...")
-            ;
+        Logger.LogInformation("Seeding data...");
         if (!await context.Students.AnyAsync(ct))
         {
             Logger.LogInformation("Adding students");
