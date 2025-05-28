@@ -1,0 +1,19 @@
+﻿services:
+  web-api:
+    image: uniletters.webapi
+    build:
+      context: .
+      dockerfile: UniLetters.WebApi/Dockerfile
+
+  database:
+    image: postgres
+    ports:
+      - "9878:5432"
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: uni!
+    volumes:
+      - uniletters_data:/var/lib/postgresql/data
+
+volumes:
+  uniletters_data:
