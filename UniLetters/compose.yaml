@@ -4,6 +4,8 @@
     build:
       context: .
       dockerfile: UniLetters.WebApi/Dockerfile
+    ports:
+      - "9877:8080"
 
   database:
     image: postgres
