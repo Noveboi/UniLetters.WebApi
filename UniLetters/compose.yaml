@@ -1,12 +1,4 @@
 ﻿services:
-  web-api:
-    image: uniletters.webapi
-    build:
-      context: .
-      dockerfile: UniLetters.WebApi/Dockerfile
-    ports:
-      - "9877:8080"
-
   database:
     image: postgres
     ports:
