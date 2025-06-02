@@ -9,6 +9,7 @@ builder.Services.AddDbContext<UniLettersDbContext>(options => options
     .EnableSensitiveDataLogging());
 
 builder.Services
+    .AddHostedService<StartupService>()
     .AddFastEndpoints()
     .AddOpenApi();
 
