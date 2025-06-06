@@ -5,5 +5,11 @@ namespace UniLetters.WebApi.Endpoints.Extensions;
 
 public static class ToDtoConversions
 {
-    public static StudentDto ToDto(this Student student) => throw new NotImplementedException();
+    public static StudentDto ToDto(this Student student)
+    {
+        return new StudentDto(
+            Fullname: student.Name,
+            Am: student.Am,
+            Average: double.Round(student.Grades.Select(grade => grade.Value).Average(), 2));
+    }
 }
