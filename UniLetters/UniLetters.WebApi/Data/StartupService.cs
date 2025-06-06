@@ -58,5 +58,7 @@ internal class StartupService(IServiceProvider sp, ILogger<StartupService> logge
                     value: double.Round(Random.Shared.NextDouble() * 10, 1)));
             }
         }
+
+        await context.SaveChangesAsync(ct);
     }
 } 
