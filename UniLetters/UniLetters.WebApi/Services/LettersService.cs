@@ -1,9 +1,18 @@
+using QuestPDF.Companion;
+using QuestPDF.Fluent;
+
 namespace UniLetters.WebApi.Services;
 
-public class LettersService
+public sealed class LettersService
 {
-    public Task<byte[]> CreateLetterAsync(int letterId, CancellationToken token)
+    public async Task<byte[]> CreateLetterAsync(int letterId, CancellationToken token)
     {
-        return Task.FromResult(Array.Empty<byte>());
+        var doc = Document.Create(document =>
+        {
+            
+        });
+
+        await doc.ShowInCompanionAsync(cancellationToken: token);
+        return [];
     }
 }
