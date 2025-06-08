@@ -6,7 +6,8 @@ using UniLetters.WebApi.Endpoints.Extensions;
 
 namespace UniLetters.WebApi.Endpoints;
 
-public class GetAllStudentsEndpoint(UniLettersDbContext dbContext) : EndpointWithoutRequest<List<StudentDto>>
+public class GetAllStudentsEndpoint(UniLettersDbContext dbContext) 
+    : EndpointWithoutRequest<IEnumerable<StudentDto>>
 {
     public override void Configure()
     {
@@ -16,8 +17,12 @@ public class GetAllStudentsEndpoint(UniLettersDbContext dbContext) : EndpointWit
 
     public override async Task HandleAsync(CancellationToken ct)
     {
-        var students = await dbContext.Students.Include(s => s.Grades).ToListAsync(ct);
-        var studentDtos = students.Select(student => student.ToDto()).ToList();
-        await SendAsync(studentDtos);
+        var students = await dbContext.Students
+            .Include(s => s.Grades)
+            .ToListAsync(ct);
+        
+        await SendAsync(
+            response: students.Select(student => student.ToDto()), 
+            cancellation: ct);
     }
 }
