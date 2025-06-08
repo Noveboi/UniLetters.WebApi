@@ -4,26 +4,33 @@ using UniLetters.WebApi.Services;
 
 namespace UniLetters.WebApi.Endpoints;
 
-public record CreateReferenceLetterRequest([property: RouteParam] string Am, [property: RouteParam] int LetterId);
+public record CreateReferenceLetterRequest(
+    [property: RouteParam] string Am,
+    [property: RouteParam] int LetterId);
 
-public class CreateReferenceLetterEndpoint : Endpoint<CreateReferenceLetterRequest, StudentCoursesDto>
+public class CreateReferenceLetterEndpoint(StudentService students) 
+    : Endpoint<CreateReferenceLetterRequest, StudentGradesDto>
 {
-    private readonly LettersService _lettersService;
-
-    public CreateReferenceLetterEndpoint(LettersService lettersService)
-    {
-        _lettersService = lettersService;
-    }
-
     public override void Configure()
     {
-        Get("/students/{am}/letters/{letterId:int}");
+        Get("/students/{am:am}/letters/{letterId:int}");
         AllowAnonymous();
     }
 
-    public override Task HandleAsync(CreateReferenceLetterRequest req, CancellationToken ct)
+    public override async Task HandleAsync(CreateReferenceLetterRequest req, CancellationToken ct)
     {
-        var referenceLetter = _lettersService.CreateLetterAsync(req.LetterId, ct);
-        return referenceLetter;
+        if (await students.GetAsync(req.Am, ct) is not { } student)
+        {
+            await SendNotFoundAsync(ct);
+            return;
+        }
+
+        var pdf = LettersService.CreateLetter(student, req.LetterId);
+        
+        await SendBytesAsync(
+            bytes: pdf,
+            fileName: $"{student.Am}_letter.pdf",
+            contentType: "application/pdf",
+            cancellation: ct);
     }
 }
