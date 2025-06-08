@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using UniLetters.WebApi.Data;
@@ -11,9 +12,11 @@ using UniLetters.WebApi.Data;
 namespace UniLetters.WebApi.Data.Migrations
 {
     [DbContext(typeof(UniLettersDbContext))]
-    partial class UniLettersDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250608171533_RenameIdToAm")]
+    partial class RenameIdToAm
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
