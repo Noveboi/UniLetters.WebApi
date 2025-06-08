@@ -8,9 +8,9 @@ public class GradeConfiguration : IEntityTypeConfiguration<Grade>
 {
     public void Configure(EntityTypeBuilder<Grade> builder)
     {
-        builder.HasKey(x => new { x.StudentId, x.CourseId });
+        builder.HasKey(x => new { x.Am, x.CourseId });
 
-        builder.HasOne(x => x.Student).WithMany(x => x.Grades).HasForeignKey(x => x.StudentId);
+        builder.HasOne(x => x.Student).WithMany(x => x.Grades).HasForeignKey(x => x.Am);
         builder.HasOne(x => x.Course).WithMany().HasForeignKey(x => x.CourseId);
     }
 }
