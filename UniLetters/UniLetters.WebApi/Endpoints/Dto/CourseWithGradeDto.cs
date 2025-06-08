@@ -1,3 +1,3 @@
 namespace UniLetters.WebApi.Endpoints.Dto;
 
-public record CourseWithGradeDto(Guid Id, string Name,  int Semester, double Grade);
+public record CourseWithGradeDto(Guid CourseId, string Name, int Semester, double Grade);

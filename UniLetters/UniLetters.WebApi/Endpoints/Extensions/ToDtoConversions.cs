@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http.Features;
 using UniLetters.WebApi.Domain;
 using UniLetters.WebApi.Endpoints.Dto;
 
@@ -13,19 +14,33 @@ public static class ToDtoConversions
             Average: double.Round(student.Grades.Select(grade => grade.Value).Average(), 2));
     }
 
+    public static CourseWithGradeDto ToDto(this Grade grade)
+    {
+        if (grade.Course == null)
+        {
+            throw new InvalidOperationException("Grade's course is null! Make sure to join!");
+        }
+
+        return new CourseWithGradeDto(
+            CourseId: grade.CourseId,
+            Name: grade.Course.Name,
+            Semester: grade.Course.Semester,
+            Grade: grade.Value);
+    }
+    
     public static CourseWithGradeDto ToDto(this Course course, double grade)
     {
         return new CourseWithGradeDto(
-            Id: course.Id,
+            CourseId: course.Id,
             Name: course.Name,
             Semester: course.Semester,
             Grade: grade);
     }
     
-    public static StudentCoursesDto ToDto(this StudentDto studentDto, List<CourseWithGradeDto> courses)
+    public static StudentCoursesDto ToDtoWithCourses(this Student student)
     {
         return new StudentCoursesDto(
-            Student: studentDto,
-            Courses: courses);
+            Student: student.ToDto(),
+            Courses: student.Grades.Select(x => x.ToDto()));
     }
 }
