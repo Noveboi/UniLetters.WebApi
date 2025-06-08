@@ -32,9 +32,9 @@ internal class StartupService(IServiceProvider sp, ILogger<StartupService> logge
         {
             logger.LogInformation("Adding courses");
             context.Courses.AddRange(
-                new Course("Τεχνολογια Λογισμικου"),
-                new Course("Αναλυση Ι"),
-                new Course("Επεξεργασια Σηματων Φωνης και Ηχου"));
+                new Course("Τεχνολογια Λογισμικου", 6),
+                new Course("Αναλυση Ι", 1),
+                new Course("Επεξεργασια Σηματων Φωνης και Ηχου", 8));
         }
 
         await context.SaveChangesAsync(ct);
@@ -53,7 +53,7 @@ internal class StartupService(IServiceProvider sp, ILogger<StartupService> logge
             foreach (var course in courses)
             {
                 context.Set<Grade>().Add(new Grade(
-                    studentId: student.Am,
+                    am: student.Am,
                     courseId: course.Id,
                     value: double.Round(Random.Shared.NextDouble() * 10, 1)));
             }
