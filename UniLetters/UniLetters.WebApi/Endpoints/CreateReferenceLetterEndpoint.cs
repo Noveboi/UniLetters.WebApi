@@ -1,4 +1,5 @@
 using FastEndpoints;
+using FluentResults;
 using UniLetters.WebApi.Endpoints.Dto;
 using UniLetters.WebApi.Services;
 
@@ -26,9 +27,15 @@ public class CreateReferenceLetterEndpoint(StudentService students)
         }
 
         var pdf = LettersService.CreateLetter(student, req.LetterId);
+        if (pdf.IsFailed)
+        {
+            pdf.Errors.ForEach(error => AddError(error.Message));
+        }
+
+        ThrowIfAnyErrors();
         
         await SendBytesAsync(
-            bytes: pdf,
+            bytes: pdf.Value,
             fileName: $"{student.Am}_letter.pdf",
             contentType: "application/pdf",
             cancellation: ct);

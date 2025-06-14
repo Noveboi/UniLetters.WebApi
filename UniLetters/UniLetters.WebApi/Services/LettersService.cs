@@ -1,3 +1,4 @@
+using FluentResults;
 using QuestPDF.Companion;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
@@ -8,8 +9,13 @@ namespace UniLetters.WebApi.Services;
 
 public sealed class LettersService
 {
-    public static byte[] CreateLetter(Student student, int letterId)
+    public static Result<byte[]> CreateLetter(Student student, int letterId)
     {
+        if (!Styles.TryGetValue(letterId, out var style))
+        {
+            return Result.Fail($"Letter ID '{letterId}' is not valid. Try {string.Join(", ", Styles.Keys)}");
+        }
+        
         var doc = Document.Create(container =>
         {
             container.Page(page =>
@@ -17,9 +23,14 @@ public sealed class LettersService
                 page.Size(PageSizes.A4);
                 page.Margin(2, Unit.Centimetre);
                 page.PageColor(Colors.White);
-                page.DefaultTextStyle(x => x.FontSize(20));
+                page.DefaultTextStyle(x => x.FontSize(14));
                 
-                page.Header().Text("Letter of Reference");
+                page.Header()
+                    .Element(style)
+                    .Text("Letter of Reference")
+                    .FontSize(48)
+                    .Bold();
+                
                 page.Content()
                     .PaddingVertical(1, Unit.Centimetre)
                     .Column(x =>
@@ -27,6 +38,7 @@ public sealed class LettersService
                         x.Spacing(20);
                         x.Item().Text(text =>
                         {
+                            text.DefaultTextStyle(s => s.FontSize(20));
                             text.Span("Concerning the student: ");
                             text.Span(student.Name).SemiBold().Underline();
                             text.Span(" with ID: ");
@@ -46,4 +58,10 @@ public sealed class LettersService
         
         return doc.GeneratePdf();
     }
+
+    private static readonly Dictionary<int, Func<IContainer, IContainer>> Styles = new()
+    {
+        [1] = container => container.DefaultTextStyle(x => x.FontColor(Colors.Indigo.Medium)),
+        [2] = container => container.DefaultTextStyle(x => x.FontColor(Colors.Green.Medium))
+    };
 }
