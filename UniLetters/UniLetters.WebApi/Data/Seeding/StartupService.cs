@@ -1,9 +1,7 @@
-
 using Microsoft.EntityFrameworkCore;
-using UniLetters.WebApi.Data.Seeding;
 using UniLetters.WebApi.Domain;
 
-namespace UniLetters.WebApi.Data;
+namespace UniLetters.WebApi.Data.Seeding;
 
 internal class StartupService(IServiceProvider sp, ILogger<StartupService> logger) : BackgroundService
 {
@@ -60,7 +58,9 @@ internal class StartupService(IServiceProvider sp, ILogger<StartupService> logge
 
         foreach (var student in students)
         {
-            foreach (var course in courses)
+            var gradeProbability = Random.Shared.NextDouble();
+
+            foreach (var course in courses.Where(_ => Random.Shared.NextDouble() > gradeProbability))
             {
                 context.Set<Grade>().Add(new Grade(
                     am: student.Am,
@@ -70,5 +70,7 @@ internal class StartupService(IServiceProvider sp, ILogger<StartupService> logge
         }
 
         await context.SaveChangesAsync(ct);
+        
+        logger.LogInformation("Finished seeding database!");
     }
 } 

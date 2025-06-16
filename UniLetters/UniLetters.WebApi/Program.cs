@@ -2,6 +2,7 @@ using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using QuestPDF.Infrastructure;
 using UniLetters.WebApi.Data;
+using UniLetters.WebApi.Data.Seeding;
 using UniLetters.WebApi.Endpoints.Constraints;
 using UniLetters.WebApi.Services;
 

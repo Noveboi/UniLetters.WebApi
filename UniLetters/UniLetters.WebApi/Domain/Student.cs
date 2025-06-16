@@ -2,7 +2,7 @@ namespace UniLetters.WebApi.Domain;
 
 public class Student
 {
-    private Student() { }
+    public Student() { }
     public Student(string am, string name)
     {
         Am = am;
