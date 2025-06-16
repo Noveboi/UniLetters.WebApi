@@ -11,7 +11,10 @@ public static class ToDtoConversions
         return new StudentDto(
             FullName: student.Name,
             Am: student.Am,
-            Average: double.Round(student.Grades.Select(grade => grade.Value).Average(), 2));
+            Average: double.Round(student.Grades
+                .Select(grade => grade.Value)
+                .DefaultIfEmpty(0)
+                .Average(), 2));
     }
 
     public static StudentGradeDto ToDto(this Grade grade)
