@@ -30,16 +30,7 @@ public static class ToDtoConversions
             Semester: grade.Course.Semester,
             Grade: grade.Value);
     }
-    
-    public static StudentGradeDto ToDto(this Course course, double grade)
-    {
-        return new StudentGradeDto(
-            CourseId: course.Id,
-            Name: course.Name,
-            Semester: course.Semester,
-            Grade: grade);
-    }
-    
+
     public static StudentGradesDto ToDtoWithCourses(this Student student)
     {
         return new StudentGradesDto(
